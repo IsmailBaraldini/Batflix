@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http auto-config="true" use-expressions="true"  >
+
+        <intercept-url pattern="/security/**" access="hasRole('ADMIN')"/>
+        <!--Если попытаться войти без логина на страницу в этом маппинге (например http://localhost:8080/user/),
+        то будет переброшено на страницу, указанную в form-login login-page='pageName.html' -->
+        <intercept-url pattern="/user/**" access="hasRole('USER')"/>
+
+
+        <form-login login-page="/login.html"
+                    username-parameter="j_username"
+                    password-parameter="j_password"
+                    login-processing-url="/j_spring_security_check"
+                    authentication-failure-url="/login.html?error=true" />
+
+        <logout logout-url="/j_spring_security_logout" logout-success-url="/"/>
+
+
+        <csrf disabled="true"/>
+
+    </http>
+
+</beans:beans>
